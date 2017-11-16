@@ -1,47 +1,46 @@
 #include <Streaming.h>
 #include <iomanip>
-#include<wire.h>
-// -- OLED -------
+
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-// OLED i2c
+#include <Wire.h>
+
+#include <Ship.h>
+
+//------- OLED INFO --------
 #define OLED_RESET -1
-#define SDA D4; // Used by the default Wire constructor
- // (called from Adafruit_SSD1306 default constructor)
-#define SCL D3; // Need to overide defaults for
- // **** original Wemos D1 board *****
-#define OLED_SCREEN_I2C_ADDRESS 0x3C
+#define SDA D4;                             //Data wire for screen
+#define SCL D3;                             //Clock wire for screen
+#define OLED_SCREEN_I2C_ADDRESS 0x3c        //Allocate memory for screen info
+
 Adafruit_SSD1306 display(OLED_RESET);
+Ship ship(20, 25);;
+
 void setup()
 {
+  Serial.begin(115200);
+  Serial << endl << "I LIVE!!" << endl;
 
- Serial.begin(115200);
- Serial << endl << "Hello World" << endl;
- // -- OLED --------------
- display.begin(SSD1306_SWITCHCAPVCC, OLED_SCREEN_I2C_ADDRESS);
+  //------------ OLED INIT ---------------
+  display.begin(SSD1306_SWITCHCAPVCC, OLED_SCREEN_I2C_ADDRESS);
 
- display.display();
- delay(2000);
- display.clearDisplay();
- display.setCursor(0,0);
- display.setTextSize(1); // - a line is 21 chars in this size
- display.setTextColor(WHITE);
+  display.display();
+  delay(2000);
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+
+  //---------- GAME INIT ----------------
 }
+
 void loop()
 {
+  display.clearDisplay();
+  display.setCursor(0, 0);
 
- display.clearDisplay();
- display.setCursor(0,0);
+  ship.Draw(display);
 
- display << "Now is the winter" << endl;
- display << "of our discontent" << endl;
- display << "made glorious summer" << endl;
- display << "by this son of butts." << endl;
-
- display.display();
-
- delay(5000);
- display.clearDisplay();
- display.display();
- delay(5000);
+  display.display();
+  delay(5000);
 }
